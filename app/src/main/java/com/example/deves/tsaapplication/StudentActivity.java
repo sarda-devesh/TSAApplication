@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class StudentActivity extends AppCompatActivity {
+    //Initialize variables and setup the display 
     ArrayList<String> locations;
     LinearLayout.LayoutParams lparams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
     LinearLayout.LayoutParams lparam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -27,7 +28,7 @@ public class StudentActivity extends AppCompatActivity {
         int index = getIntent().getIntExtra("ID",0);
         read(index);
     }
-
+    //Read the file from the directory about the student response and display the student answer in red or blue along with the correct answer
     private void read(int index) {
         LinearLayout l = (LinearLayout) findViewById(R.id.per);
         TextView title = (TextView) findViewById(R.id.Title);
@@ -59,7 +60,7 @@ public class StudentActivity extends AppCompatActivity {
             title.setText("Error: " + e.getMessage());
         }
     }
-
+    //Add the specified textview to the display
     private TextView createtext(String st) {
         TextView student = new TextView(this);
         student.setLayoutParams(lparam);
