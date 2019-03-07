@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     int numberofquestions;
     private static final String TAG = "MainActivity";
     private static final int requestPermissionID = 101;
-
+  
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,13 +79,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
+    //Launch an intent to the overview of the student performances
     private void launch() {
         Intent i = new Intent(this,DisplayActivity.class);
         i.putStringArrayListExtra("locations",locations);
         startActivity(i);
     }
-
+    //Initialize all the necessary variables for the method
     private void initialize() {
         mCameraView = findViewById(R.id.surfaceView);
         mTextView = findViewById(R.id.text_view);
@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         done = (Button) findViewById(R.id.done);
 
     }
-
+    //Save the response of the teacher in a directory
     private void saveteacheranswers() {
         String[] response = getresponse(0);
         numberofquestions = response.length;
@@ -115,13 +115,13 @@ public class MainActivity extends AppCompatActivity {
             mCameraSource.stop();
         }
     }
-
+    //Process the student response
     private void savestudentanswers() {
         String[] response = getresponse(1);
         String[] ans = read(locations.get(0));
         getscoreandwritetofile(response,ans);
     }
-
+    //Calculate the student score and write it to the directory 
     private void getscoreandwritetofile(String[] a, String[] b) {
         if(a.length != b.length) {
             Log.d(TAG,"Not the same size");
@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
             mCameraSource.stop();
         }
     }
-
+    //Read in the teacher key when grading student responses 
     private String[] read(String d) {
         String[] answers = null;
         try {
@@ -170,8 +170,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return answers;
     }
-
-
+    //Get the characters detected by the Vision's OCR technology
     private String[] getresponse(int start) {
         String line = mTextView.getText().toString();
         String[] lines = line.split("\n");
@@ -185,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return student;
     }
-
+    //Initilaze the input from the camera and the live display
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode != requestPermissionID) {
@@ -205,28 +204,18 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
+    //Set up the processor to send information from the camera to the OCR technology and receive the result
     private void startCameraSource() {
-
-        //Create the TextRecognizer
         final TextRecognizer textRecognizer = new TextRecognizer.Builder(getApplicationContext()).build();
-
         if (!textRecognizer.isOperational()) {
             Log.w(TAG, "Detector dependencies not loaded yet");
         } else {
-
-            //Initialize camerasource to use high resolution and set Autofocus on.
             mCameraSource = new CameraSource.Builder(getApplicationContext(), textRecognizer)
                     .setFacing(CameraSource.CAMERA_FACING_BACK)
                     .setRequestedPreviewSize(1280, 1024)
                     .setAutoFocusEnabled(true)
                     .setRequestedFps(2.0f)
                     .build();
-
-            /**
-             * Add call back to SurfaceView and check if camera permission is granted.
-             * If permission is granted we can start our cameraSource and pass it to surfaceView
-             */
             mCameraView.getHolder().addCallback(new SurfaceHolder.Callback() {
                 @Override
                 public void surfaceCreated(SurfaceHolder holder) {
@@ -255,17 +244,10 @@ public class MainActivity extends AppCompatActivity {
                     mCameraSource.stop();
                 }
             });
-
-            //Set the TextRecognizer's Processor.
             textRecognizer.setProcessor(new Detector.Processor<TextBlock>() {
                 @Override
                 public void release() {
                 }
-
-                /**
-                 * Detect all the text from camera using TextBlock and the values into a stringBuilder
-                 * which will then be set to the textView.
-                 * */
                 @Override
                 public void receiveDetections(Detector.Detections<TextBlock> detections) {
                     final SparseArray<TextBlock> items = detections.getDetectedItems();
