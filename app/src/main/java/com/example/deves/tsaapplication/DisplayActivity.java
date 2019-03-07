@@ -30,7 +30,7 @@ public class DisplayActivity extends AppCompatActivity {
         lparams.setMargins(0,25,0,25);
         dis();
     }
-
+    //Display an overview of the scores of the students
     private void dis() {
         LinearLayout l = (LinearLayout) findViewById(R.id.display);
         for(int i = 1; i < locations.size();i++) {
@@ -51,7 +51,7 @@ public class DisplayActivity extends AppCompatActivity {
             l.addView(tv);
         }
     }
-
+    //Launch an intent to show a more detalied view of any student's performance
     private void show(int id) {
         Intent launch = new Intent(this,StudentActivity.class);
         launch.putStringArrayListExtra("locations",locations);
