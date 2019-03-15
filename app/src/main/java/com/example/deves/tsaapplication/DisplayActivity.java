@@ -9,13 +9,9 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
-import android.widget.LinearLayout;
 
-import com.google.android.gms.vision.text.Line;
+
 
 public class DisplayActivity extends AppCompatActivity {
     ArrayList<String> locations = null;

@@ -18,6 +18,7 @@ public class UserInput extends AppCompatActivity {
     LinearLayout parent;
     int numberofquestions = 0;
     ArrayList<String> locations;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,15 +70,18 @@ public class UserInput extends AppCompatActivity {
             }
         });
     }
+
     //Set the view to take in student's answers
     private void studentinput() {
         EditText number = (EditText) findViewById(R.id.number);
+        number.setLayoutParams(lparams);
         number.setHint("Name of student: ");
         Button b = (Button) findViewById(R.id.set);
         b.setVisibility(View.INVISIBLE);
         numberofquestions = getIntent().getIntExtra("questions",0);
         addedit();
     }
+
     //Add EditText views where the user can type
     private void addedit() {
         for(int i = 0; i < numberofquestions;i++) {

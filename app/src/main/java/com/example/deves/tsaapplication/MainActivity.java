@@ -26,6 +26,7 @@ import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
+import com.google.android.gms.vision.text.Line;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -62,11 +63,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                String a = "student response";
                if(locations.size() == 0) {
-                   saveteacheranswers();
+                   String[] response = getresponse(0);
+                   saveteacheranswers(response);
                    addper.setText("Add Student Answer");
                    a = "teacher key";
                } else {
-                   savestudentanswers();
+                   String[] response = getresponse(1);
+                   savestudentanswers(response);
                }
                Toast.makeText(getApplicationContext(),"Recorded " + a, Toast.LENGTH_SHORT).show();
             }
@@ -78,6 +81,20 @@ public class MainActivity extends AppCompatActivity {
                 launch();
             }
         });
+        mTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                manualinput();
+            }
+        });
+    }
+
+    private void manualinput() {
+        Intent i = new Intent(this,UserInput.class);
+        i.putStringArrayListExtra("locations",locations);
+        int code = Math.min(locations.size(),1);
+        i.putExtra("code",code);
+        startActivity(i);
     }
     //Launch an intent to the overview of the student performances
     private void launch() {
@@ -89,14 +106,30 @@ public class MainActivity extends AppCompatActivity {
     private void initialize() {
         mCameraView = findViewById(R.id.surfaceView);
         mTextView = findViewById(R.id.text_view);
-        locations = new ArrayList<String>();
         addper = (Button) findViewById(R.id.addper);
         done = (Button) findViewById(R.id.done);
-
+        if(getIntent().hasExtra("locations")) {
+            locations = getIntent().getStringArrayListExtra("locations");
+        } else {
+            locations = new ArrayList<String>();
+        }
+        if(getIntent().hasExtra("questions")) {
+            numberofquestions = getIntent().getIntExtra("questions",0);
+        }
+        if(getIntent().hasExtra("response")) {
+            String[] response = getIntent().getStringArrayExtra("response");
+            if(response.length == numberofquestions) {
+                saveteacheranswers(response);
+            } else {
+                currentname = response[0];
+                response = Arrays.copyOfRange(response,1,response.length);
+                savestudentanswers(response);
+            }
+        }
     }
     //Save the response of the teacher in a directory
-    private void saveteacheranswers() {
-        String[] response = getresponse(0);
+    private void saveteacheranswers(String[] response) {
+
         numberofquestions = response.length;
         String t = "";
         for(int i = 0; i < response.length;i++) {
@@ -116,8 +149,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     //Process the student response
-    private void savestudentanswers() {
-        String[] response = getresponse(1);
+    private void savestudentanswers(String[] response) {
+
         String[] ans = read(locations.get(0));
         getscoreandwritetofile(response,ans);
     }

@@ -19,7 +19,6 @@
            android:id="@+id/display"
            android:orientation="vertical">
 
-
        </LinearLayout>
 
    </ScrollView>

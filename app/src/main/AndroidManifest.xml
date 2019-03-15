@@ -27,6 +27,7 @@
         </activity>
         <activity android:name=".DisplayActivity" />
         <activity android:name=".StudentActivity"></activity>
+        <activity android:name=".UserInput"></activity>
     </application>
 
 </manifest>
