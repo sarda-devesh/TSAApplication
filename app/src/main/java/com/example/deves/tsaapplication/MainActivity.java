@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
         i.putStringArrayListExtra("locations",locations);
         int code = Math.min(locations.size(),1);
         i.putExtra("code",code);
+        i.putExtra("questions",numberofquestions);
         startActivity(i);
     }
     //Launch an intent to the overview of the student performances

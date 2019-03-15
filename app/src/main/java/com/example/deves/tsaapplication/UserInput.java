@@ -26,6 +26,7 @@ public class UserInput extends AppCompatActivity {
         lparams.setMargins(0,25,0,25);
         parent = (LinearLayout) findViewById(R.id.manualparent);
         final int code = getIntent().getIntExtra("code",0);
+        numberofquestions = getIntent().getIntExtra("questions",0);
         locations = getIntent().getStringArrayListExtra("locations");
         if(code == 0) {
             teacherinput();
