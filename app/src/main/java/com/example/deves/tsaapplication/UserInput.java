@@ -24,7 +24,7 @@ public class UserInput extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_input);
         lparams.setMargins(0,25,0,25);
-        parent = (LinearLayout) findViewById(R.id.manualparent);
+        parent = findViewById(R.id.manualparent);
         final int code = getIntent().getIntExtra("code",0);
         numberofquestions = getIntent().getIntExtra("questions",0);
         locations = getIntent().getStringArrayListExtra("locations");
@@ -33,7 +33,7 @@ public class UserInput extends AppCompatActivity {
         } else {
             studentinput();
         }
-        Button done = (Button) findViewById(R.id.mandone);
+        Button done = findViewById(R.id.mandone);
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -42,7 +42,7 @@ public class UserInput extends AppCompatActivity {
                    response = readuserinput(numberofquestions);
                 } else {
                     response = readuserinput(numberofquestions + 1);
-                    EditText number = (EditText) findViewById(R.id.number);
+                    EditText number = findViewById(R.id.number);
                     response[0] = number.getText().toString();
                 }
                 goback(response);
@@ -56,16 +56,17 @@ public class UserInput extends AppCompatActivity {
         i.putExtra("questions",numberofquestions);
         i.putExtra("response",response);
         i.putStringArrayListExtra("locations",locations);
+        i.putExtra("login","L");
         startActivity(i);
     }
 
     //Set the view for taking in teacher's key
     private void teacherinput() {
-        Button b = (Button) findViewById(R.id.set);
+        Button b = findViewById(R.id.set);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText n = (EditText) findViewById(R.id.number);
+                EditText n = findViewById(R.id.number);
                 numberofquestions = Integer.parseInt(n.getText().toString());
                 addedit();
             }
@@ -74,10 +75,10 @@ public class UserInput extends AppCompatActivity {
 
     //Set the view to take in student's answers
     private void studentinput() {
-        EditText number = (EditText) findViewById(R.id.number);
+        EditText number = findViewById(R.id.number);
         number.setLayoutParams(lparams);
         number.setHint("Name of student: ");
-        Button b = (Button) findViewById(R.id.set);
+        Button b = findViewById(R.id.set);
         b.setVisibility(View.INVISIBLE);
         numberofquestions = getIntent().getIntExtra("questions",0);
         addedit();
@@ -98,7 +99,7 @@ public class UserInput extends AppCompatActivity {
         String[] t = new String[size];
         int difference = size - numberofquestions;
         for (int i = difference; i < size;i++) {
-            EditText e = (EditText) findViewById(i - difference);
+            EditText e = findViewById(i - difference);
             t[i] = e.getText().toString();
         }
         return t;

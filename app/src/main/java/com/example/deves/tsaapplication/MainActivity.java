@@ -48,11 +48,16 @@ public class MainActivity extends AppCompatActivity {
     String currentname = "NA";
     Calendar cal;
     int numberofquestions;
+    String a = "";
     private static final String TAG = "MainActivity";
     private static final int requestPermissionID = 101;
   
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if(!getIntent().hasExtra("login")) {
+            Intent i = new Intent(this,Login.class);
+            startActivity(i);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         cal = Calendar.getInstance();
@@ -61,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
         addper.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               String a = "student response";
                if(locations.size() == 0) {
                    String[] response = getresponse(0);
                    saveteacheranswers(response);
@@ -70,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
                } else {
                    String[] response = getresponse(1);
                    savestudentanswers(response);
+                   a = "student response";
                }
                Toast.makeText(getApplicationContext(),"Recorded " + a, Toast.LENGTH_SHORT).show();
             }
@@ -107,10 +112,13 @@ public class MainActivity extends AppCompatActivity {
     private void initialize() {
         mCameraView = findViewById(R.id.surfaceView);
         mTextView = findViewById(R.id.text_view);
-        addper = (Button) findViewById(R.id.addper);
-        done = (Button) findViewById(R.id.done);
+        addper = findViewById(R.id.addper);
+        done = findViewById(R.id.done);
         if(getIntent().hasExtra("locations")) {
             locations = getIntent().getStringArrayListExtra("locations");
+            if(locations.size() > 1) {
+                addper.setText("Add Student Answer");
+            }
         } else {
             locations = new ArrayList<String>();
         }
@@ -121,16 +129,19 @@ public class MainActivity extends AppCompatActivity {
             String[] response = getIntent().getStringArrayExtra("response");
             if(response.length == numberofquestions) {
                 saveteacheranswers(response);
+                a = "teacher key";
             } else {
                 currentname = response[0];
                 response = Arrays.copyOfRange(response,1,response.length);
                 savestudentanswers(response);
+                a = "student response";
             }
+            addper.setText("Add Student Answer");
+            Toast.makeText(getApplicationContext(),"Recorded " + a, Toast.LENGTH_SHORT).show();
         }
     }
     //Save the response of the teacher in a directory
     private void saveteacheranswers(String[] response) {
-
         numberofquestions = response.length;
         String t = "";
         for(int i = 0; i < response.length;i++) {
@@ -169,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
                 s++;
             }
         }
-        String filename = (s + "\\" + correct.length) + " " + currentname + " " + cal.getTime().toString();
+        String filename = (s + " " + correct.length) + " " + currentname + " " + cal.getTime().toString();
         String t = "";
         for(int i = 0; i < correct.length;i++) {
             t += a[i] + " " + String.valueOf(correct[i]) + " " + b[i] + "\n";

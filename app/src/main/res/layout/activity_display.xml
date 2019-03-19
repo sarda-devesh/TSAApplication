@@ -33,6 +33,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
+            android:id="@+id/back1"
             android:text="Add Student Scores"
             />
 
