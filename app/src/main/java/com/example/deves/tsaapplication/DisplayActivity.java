@@ -6,17 +6,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import java.util.ArrayList;
+import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
 
 
 public class DisplayActivity extends AppCompatActivity {
     ArrayList<String> locations = null;
     LayoutParams lparams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+    DatabaseReference databaseTests;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,6 +31,7 @@ public class DisplayActivity extends AppCompatActivity {
         if(getIntent().hasExtra("locations")) {
             locations = getIntent().getStringArrayListExtra("locations");
         }
+        databaseTests = FirebaseDatabase.getInstance().getReference("Tests");
         lparams.setMargins(0,25,0,25);
         dis();
         Button b = findViewById(R.id.back1);
@@ -31,6 +39,13 @@ public class DisplayActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 goback();
+            }
+        });
+        Button ser = findViewById(R.id.AddtoDatabase);
+        ser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                writetoserver();
             }
         });
     }
@@ -69,6 +84,19 @@ public class DisplayActivity extends AppCompatActivity {
         launch.putStringArrayListExtra("locations",locations);
         launch.putExtra("ID",id);
         startActivity(launch);
+    }
+
+    private void writetoserver() {
+        EditText editname = findViewById(R.id.testname);
+        String name = editname.getText().toString().trim();
+        try {
+            String id = databaseTests.push().getKey();
+            TestScores test = new TestScores(name,locations,id);
+            databaseTests.child(id).setValue(test);
+            Toast.makeText(this,"Added test to database",Toast.LENGTH_LONG).show();
+        }catch (Exception e) {
+            Toast.makeText(this,e.getMessage(),Toast.LENGTH_LONG).show();
+        }
     }
 
 }

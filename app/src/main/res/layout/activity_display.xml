@@ -8,6 +8,12 @@
     android:orientation="vertical"
     tools:context=".DisplayActivity">
 
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter the name of the test:"
+        android:id="@+id/testname"/>
+
    <ScrollView
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
@@ -30,9 +36,16 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:id="@+id/AddtoDatabase"
+            android:text="Add to server"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
+            android:layout_alignParentLeft="true"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
             android:id="@+id/back1"
             android:text="Add Student Scores"
             />

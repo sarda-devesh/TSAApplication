@@ -44,6 +44,10 @@ public class Login extends AppCompatActivity {
         String display = "Password doesn't match";
         if(a.equals(b)) {
             display = "Created account";
+            first.getText().clear();
+            second.getText().clear();
+            EditText user = findViewById(R.id.newuser);
+            user.getText().clear();
         }
         Toast.makeText(getApplicationContext(),display, Toast.LENGTH_SHORT).show();
     }

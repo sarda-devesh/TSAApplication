@@ -4,10 +4,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.media.Image;
-import android.provider.ContactsContract;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +14,6 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,7 +21,6 @@ import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
-import com.google.android.gms.vision.text.Line;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -42,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     SurfaceView mCameraView;
     TextView mTextView;
     CameraSource mCameraSource;
-    ArrayList<String> locations;
+    ArrayList<String> locations = null;
     Button addper;
     Button done;
     String currentname = "NA";
@@ -92,6 +86,21 @@ public class MainActivity extends AppCompatActivity {
                 manualinput();
             }
         });
+        Button previous = findViewById(R.id.prev);
+        previous.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                seeprevious();
+            }
+        });
+    }
+
+    private void seeprevious() {
+        Intent i = new Intent(this, PreviousTests.class);
+        if(locations != null) {
+            i.putStringArrayListExtra("locations",locations);
+        }
+        startActivity(i);
     }
 
     private void manualinput() {
@@ -175,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
         int s = 0;
         boolean[] correct = new boolean[a.length];
         for(int i = 0; i < correct.length;i++) {
-            if(a[i].equals(b[i])) {
+            if(a[i].equalsIgnoreCase(b[i])) {
                 correct[i] = true;
                 s++;
             }
@@ -183,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
         String filename = (s + " " + correct.length) + " " + currentname + " " + cal.getTime().toString();
         String t = "";
         for(int i = 0; i < correct.length;i++) {
-            t += a[i] + " " + String.valueOf(correct[i]) + " " + b[i] + "\n";
+            t += a[i] + " " + correct[i] + " " + b[i] + "\n";
         }
         File file = new File(this.getFilesDir(), filename);
         FileOutputStream outputStream;
@@ -215,6 +224,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return answers;
     }
+
     //Get the characters detected by the Vision's OCR technology
     private String[] getresponse(int start) {
         String line = mTextView.getText().toString();
